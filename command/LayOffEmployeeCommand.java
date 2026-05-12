@@ -3,15 +3,11 @@ package command;
 import model.Employee;
 import model.Team;
 
-/**
- * LayOffEmployeeCommand - Command Pattern'in Concrete Command sınıfı.
- * Bir çalışanı takımdan çıkarır (işten çıkarma).
- * undo() çağrıldığında çalışanı geri ekler.
- */
+// Concrete Command 
 public class LayOffEmployeeCommand implements HRCommand {
 
-    private Team sourceTeam;
-    private Employee employee;
+    private Team sourceTeam; //Team object reference for laying off an employee from a team
+    private Employee employee; //Employee reference as a parameter for removeMember() method
 
     public LayOffEmployeeCommand(Team sourceTeam, Employee employee) {
         this.sourceTeam = sourceTeam;
@@ -21,14 +17,14 @@ public class LayOffEmployeeCommand implements HRCommand {
     @Override
     public void execute() {
         sourceTeam.removeMember(employee);
-        System.out.println("❌ Laid off: " + employee.getName()
+        System.out.println("Laid off: " + employee.getName()
                 + " from Team: " + sourceTeam.getName());
     }
 
     @Override
     public void undo() {
         sourceTeam.addMember(employee);
-        System.out.println("↩️  Undo LayOff: " + employee.getName()
+        System.out.println("Undo LayOff: " + employee.getName()
                 + " re-added to Team: " + sourceTeam.getName());
     }
 

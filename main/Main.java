@@ -1,7 +1,8 @@
 // TEAM MEMBERS:
-// [YOUR NAME 1]
-// [YOUR NAME 2]
-// [YOUR NAME 3]
+// [DİDEM SARIKAYA]
+// [DUYGU SÖĞÜTDALLI]
+// [YAĞMUR DAĞDEMİR]
+// [EFE YOLARTIRAN]
 
 import command.*;
 import factory.HRFactory;
@@ -14,11 +15,7 @@ import visitor.*;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-/**
- * Main - SE311 HR Application Demo
- * Tüm 6 design pattern'in entegre çalışmasını gösterir:
- * Composite, Observer, Visitor, Command, Singleton, Factory
- */
+
 public class Main {
 
     public static void main(String[] args) {
