@@ -6,11 +6,12 @@ import model.Team;
 import java.time.LocalDate;
 
 /**
- * HRFactory - Factory Pattern'in Concrete Factory sınıfı.
- * OrgComponentFactory arayüzünü uygular.
- * Employee, Manager, Team ve Department nesnelerini oluşturur.
- * Promote işleminde Manager yaratımı bu sınıf üzerinden yapılır.
+ * HRFactory - Concrete Factory class of the Factory Pattern.
+ * Implements the OrgComponentFactory interface.
+ * Responsible for creating Employee, Manager, Team, and Department objects.
+ * Manager creation during promotion is handled through this class.
  */
+
 public class HRFactory implements OrgComponentFactory {
 
     @Override
@@ -22,6 +23,7 @@ public class HRFactory implements OrgComponentFactory {
     @Override
     public Employee createManager(String name, String gender, LocalDate hireDate,
                                   double salary) {
+        // Title as "Manager" — role is also flagged via setManager()
         Employee manager = new Employee(name, gender, hireDate, salary, "Manager");
         manager.setManager(true);
         return manager;

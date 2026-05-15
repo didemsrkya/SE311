@@ -8,14 +8,13 @@ import visitor.ReportVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * OrgChartManager - Singleton Pattern.
- * Tüm organizasyon ağacının tek giriş noktasıdır.
- * Sadece bir instance var olabilir; bu sayede tutarsız durum oluşmaz.
- * Command çalıştırma, rapor üretme ve CorporateHead yönetimi buradan yapılır.
- */
+ /**
+  *  * OrgChartManager - Singleton Pattern.
+  *  * Single entry point for the entire organization tree.
+  *  * Only one instance can exist, preventing inconsistent state.
+  *  * Handles command execution, report generation, and CorporateHead management.
+  *  */
 
-//It is the object structure participant of our visitor class.
 public class OrgChartManager {
 
     private static OrgChartManager instance;
@@ -24,21 +23,20 @@ public class OrgChartManager {
     private CommandHistory commandHistory;
     private CorporateHead corporateHead;
 
-    // Private constructor — dışarıdan new ile oluşturulamaz
+     // Private constructor - cannot be instantiated from outside -
     private OrgChartManager() {
         this.departments    = new ArrayList<>();
         this.commandHistory = new CommandHistory();
     }
 
-    // Thread-safe değil, ama akademik proje için yeterli
-    public static OrgChartManager getInstance() {
-        if (instance == null) {
-            instance = new OrgChartManager();
-        }
-        return instance;
-    }
+     public static synchronized OrgChartManager getInstance() {
+         if (instance == null) {
+             instance = new OrgChartManager();
+         }
+         return instance;
+     }
 
-    // ── Department Yönetimi ─────────────────────────────────────
+    //Department Management
 
     public void addDepartment(Department dept) {
         if (corporateHead != null) {
@@ -55,17 +53,17 @@ public class OrgChartManager {
         return departments;
     }
 
-    // ── CorporateHead Atama ─────────────────────────────────────
+     //CorporateHead Assignment
 
     public void setCorporateHead(CorporateHead head) {
         this.corporateHead = head;
-        // Mevcut tüm departmanlara observer olarak ekle
+        // Add as observer to all existing departments
         for (Department dept : departments) {
             dept.addObserver(head);
         }
     }
 
-    // ── Command Çalıştırma (audit log dahil) ────────────────────
+     //Command Execution (including audit log)
 
     public void executeCommand(HRCommand command) {
         command.execute();
@@ -82,7 +80,7 @@ public class OrgChartManager {
         }
     }
 
-    // ── Rapor Üretme ────────────────────────────────────────────
+     //Report Generation
 
     /**
      * Tüm organizasyon ağacı üzerinde Visitor çalıştırır.
@@ -95,7 +93,7 @@ public class OrgChartManager {
         visitor.printReport();
     }
 
-    // ── Organizasyon Şeması Yazdırma ────────────────────────────
+     //Org Chart Printing
 
     public void printOrgChart() {
         System.out.println("\n════════════ ORGANIZATIONAL CHART ════════════");
@@ -105,7 +103,7 @@ public class OrgChartManager {
         System.out.println("═══════════════════════════════════════════════\n");
     }
 
-    // ── Audit Log ───────────────────────────────────────────────
+    //Audit Log
 
     public void printAuditLog() {
         commandHistory.printAuditLog();

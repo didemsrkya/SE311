@@ -6,10 +6,11 @@ import model.Team;
 import java.time.LocalDate;
 
 /**
- * OrgComponentFactory - Factory Pattern'in arayüzü.
- * Tüm organizasyon nesnelerinin yaratım sorumluluğunu soyutlar.
- * Nesne oluşturma mantığını istemci kodundan ayırır.
+ * OrgComponentFactory - Interface of the Factory Pattern.
+ * Abstracts the creation responsibility of all organization objects.
+ * Separates object creation logic from client code.
  */
+
 public interface OrgComponentFactory {
     Employee createEmployee(String name, String gender, LocalDate hireDate,
                             double salary, String title);
