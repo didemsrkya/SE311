@@ -4,16 +4,12 @@ import model.Department;
 import model.Employee;
 import model.Team;
 
-/**
- * SalaryBandReportVisitor - Visitor Pattern'in Concrete Visitor sınıfı.
- * Çalışanları maaş bandına göre gruplar: Junior (<50k), Mid (50k-100k), Senior (>100k).
- * Spec'te "you choose two other kinds of reporting" kapsamında seçilmiştir.
- */
+// It is concrete visitor class
 public class SalaryBandReportVisitor implements ReportVisitor {
 
-    private int juniorCount = 0;   // < 50,000
-    private int midCount    = 0;   // 50,000 - 100,000
-    private int seniorCount = 0;   // > 100,000
+    private int juniorCount = 0;   // If the salary is less than 50 000
+    private int midCount    = 0;   // If the salary is between 50 000 and 100 000
+    private int seniorCount = 0;   // If the salary is greater than 100 000
     private double totalSalary = 0;
     private int totalEmployees = 0;
 
@@ -22,7 +18,7 @@ public class SalaryBandReportVisitor implements ReportVisitor {
         double salary = employee.getSalary();
         totalSalary += salary;
         totalEmployees++;
-
+        //We are deciding the employees position
         if (salary < 50_000) {
             juniorCount++;
         } else if (salary <= 100_000) {
@@ -41,13 +37,10 @@ public class SalaryBandReportVisitor implements ReportVisitor {
     @Override
     public void printReport() {
         double avg = totalEmployees > 0 ? totalSalary / totalEmployees : 0;
-        System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║         SALARY BAND REPORT           ║");
-        System.out.println("╠══════════════════════════════════════╣");
-        System.out.println("║ Junior  (< $50k)   : " + juniorCount);
-        System.out.println("║ Mid     ($50k-100k): " + midCount);
-        System.out.println("║ Senior  (> $100k)  : " + seniorCount);
-        System.out.printf( "║ Average Salary     : $%.2f%n", avg);
-        System.out.println("╚══════════════════════════════════════╝");
+        System.out.println(" SALARY BAND REPORT");
+        System.out.println("Junior          : " + juniorCount + " employees earn less than 50 000");
+        System.out.println("Mid             : " + midCount + " employees earn between 50 000 and 100 000");
+        System.out.println("Senior          : " + seniorCount + " employees earn greater than 100 000" );
+        System.out.printf( "Average Salary  : $%.2f%n", avg);
     }
 }

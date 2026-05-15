@@ -9,6 +9,7 @@ import java.util.List;
  * Employee nesnelerini gruplar. Bir Department altında yer alır.
  * accept() metoduyla Visitor tüm üyelerini ziyaret edebilir.
  */
+//It is our the concrete element of our visitor pattern.
 public class Team implements OrgComponent {
 
     private String name;

@@ -9,6 +9,6 @@ import visitor.ReportVisitor;
  */
 public interface OrgComponent {
     String getName();
-    void accept(ReportVisitor visitor);
+    void accept(ReportVisitor visitor); //This is the participant of our visitor pattern. It is the Element. 
     void printDetails(String indent);
 }

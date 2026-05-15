@@ -12,6 +12,7 @@ import java.util.List;
  * bu sayede merge/split olaylarında Observer'lara bildirim gönderir.
  * Observer Pattern ile doğrudan bağlantılıdır.
  */
+//It is our the concrete element of our visitor pattern.
 public class Department implements OrgComponent, OrgSubject {
 
     private String name;

@@ -3,12 +3,7 @@ package visitor;
 import model.Department;
 import model.Employee;
 import model.Team;
-
-/**
- * DiversityReportVisitor - Visitor Pattern'in Concrete Visitor sınıfı.
- * Organizasyon genelindeki erkek/kadın çalışan oranını hesaplar.
- * accept() çağrısıyla Composite tree'yi gezerek tüm Employee'leri toplar.
- */
+// It is concrete visitor class
 public class DiversityReportVisitor implements ReportVisitor {
 
     private int maleCount = 0;
@@ -16,6 +11,7 @@ public class DiversityReportVisitor implements ReportVisitor {
 
     @Override
     public void visitEmployee(Employee employee) {
+        //In here we visit each employee and count the number of male and female employees
         if (employee.getGender().equalsIgnoreCase("Male")) {
             maleCount++;
         } else {
@@ -24,26 +20,24 @@ public class DiversityReportVisitor implements ReportVisitor {
     }
 
     @Override
-    public void visitTeam(Team team) {
-        // Team düğümünde özel işlem yok; Employee'ler Department.accept()'te ziyaret edilir
-    }
+    public void visitTeam(Team team) {}
 
     @Override
-    public void visitDepartment(Department department) {
-        // Department düğümünde özel işlem yok
-    }
+    public void visitDepartment(Department department) {}
 
     @Override
     public void printReport() {
-        int total = maleCount + femaleCount;
-        System.out.println("╔══════════════════════════════════╗");
-        System.out.println("║       DIVERSITY REPORT           ║");
-        System.out.println("╠══════════════════════════════════╣");
-        System.out.println("║ Total Employees : " + total);
-        System.out.println("║ Male            : " + maleCount
-                + (total > 0 ? " (" + String.format("%.1f", (maleCount * 100.0 / total)) + "%)" : ""));
-        System.out.println("║ Female          : " + femaleCount
-                + (total > 0 ? " (" + String.format("%.1f", (femaleCount * 100.0 / total)) + "%)" : ""));
-        System.out.println("╚══════════════════════════════════╝");
+        int total = maleCount + femaleCount; //all employees
+        System.out.println(" DIVERSITY REPORT");
+        System.out.println("Total Employees : " + total);
+        // We are calculating the percentage of male and female employees.
+        double percentageOfMen =0;
+        double percentageOfFemale = 0;
+        if(total>0){
+            percentageOfMen= maleCount * 100.0 / total;
+            percentageOfFemale = femaleCount * 100.0 / total;
+        }
+        System.out.printf("Male            : %d (%.1f%%)%n", maleCount, percentageOfMen);
+        System.out.printf("Female          : %d (%.1f%%)%n", femaleCount, percentageOfFemale);
     }
 }

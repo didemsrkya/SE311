@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
  * Alt eleman barındırmaz. Bir çalışanın tüm bilgilerini tutar.
  * Factory Pattern aracılığıyla oluşturulur.
  */
+//It is our the concrete element of our visitor pattern.
 public class Employee implements OrgComponent {
 
     private String name;

@@ -14,6 +14,8 @@ import java.util.List;
  * Sadece bir instance var olabilir; bu sayede tutarsız durum oluşmaz.
  * Command çalıştırma, rapor üretme ve CorporateHead yönetimi buradan yapılır.
  */
+
+//It is the object structure participant of our visitor class.
 public class OrgChartManager {
 
     private static OrgChartManager instance;

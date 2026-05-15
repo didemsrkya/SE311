@@ -5,12 +5,7 @@ import model.Employee;
 import model.Team;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * SeniorityReportVisitor - Visitor Pattern'in Concrete Visitor sınıfı.
- * Şirkette 20 yıldan fazla çalışan kıdemli çalışanları listeler.
- * Spec'te doğrudan istenmiş bir rapordur.
- */
+// It is concrete visitor class
 public class SeniorityReportVisitor implements ReportVisitor {
 
     private static final int SENIORITY_THRESHOLD = 20;
@@ -18,6 +13,7 @@ public class SeniorityReportVisitor implements ReportVisitor {
 
     @Override
     public void visitEmployee(Employee employee) {
+        //We are checking if the employee worked more than 20 years
         if (employee.getYearsAtCompany() >= SENIORITY_THRESHOLD) {
             seniorEmployees.add(employee);
         }
@@ -31,17 +27,14 @@ public class SeniorityReportVisitor implements ReportVisitor {
 
     @Override
     public void printReport() {
-        System.out.println("╔══════════════════════════════════════════════════╗");
-        System.out.println("║             SENIORITY REPORT (20+ years)         ║");
-        System.out.println("╠══════════════════════════════════════════════════╣");
+        System.out.println(" SENIORITY REPORT");
         if (seniorEmployees.isEmpty()) {
-            System.out.println("║  No employees with 20+ years found.             ║");
+            System.out.println(" No employees with 20+ years found.");
         } else {
             for (Employee e : seniorEmployees) {
-                System.out.printf("║  %-20s | %2d years | %-10s ║%n",
+                System.out.printf("%-20s | %2d years | %-10s %n",
                         e.getName(), e.getYearsAtCompany(), e.getTitle());
             }
         }
-        System.out.println("╚══════════════════════════════════════════════════╝");
     }
 }
