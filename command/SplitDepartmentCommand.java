@@ -5,17 +5,12 @@ import model.OrgComponent;
 import singleton.OrgChartManager;
 import java.util.List;
 
-/**
- * SplitDepartmentCommand - Command Pattern'in Concrete Command sınıfı.
- * Bir departmandan belirli takımları ayırarak yeni departman oluşturur.
- * Department.split() çağrısı Observer aracılığıyla CorporateHead'i bilgilendirir.
- * Spec'te "split back as if it never merged" zorunluluğunu karşılar.
- */
+//concrete command class, it separates a team from a departmen to create a new department
 public class SplitDepartmentCommand implements HRCommand {
 
     private Department sourceDepartment;
     private String newDepartmentName;
-    private List<OrgComponent> teamsToSplit;
+    private List<OrgComponent> teamsToSplit; //the reference to the team which will be splitted
     private Department createdDepartment;
 
     public SplitDepartmentCommand(Department sourceDepartment,
@@ -30,24 +25,24 @@ public class SplitDepartmentCommand implements HRCommand {
     public void execute() {
         createdDepartment = sourceDepartment.split(newDepartmentName, teamsToSplit);
         OrgChartManager.getInstance().addDepartment(createdDepartment);
-        System.out.println("✂️  Split: '" + sourceDepartment.getName()
-                + "' → new dept '" + newDepartmentName + "'");
+        System.out.println("Split: '" + sourceDepartment.getName()
+                + "' -> new dept '" + newDepartmentName + "'");
     }
 
     @Override
     public void undo() {
-        // Yeni departmanın çocuklarını kaynağa geri taşı
+        // moving the new deparment's children to the source 
         for (OrgComponent child : createdDepartment.getChildren()) {
             sourceDepartment.addChild(child);
         }
         OrgChartManager.getInstance().removeDepartment(createdDepartment);
-        System.out.println("↩️  Undo Split: '" + newDepartmentName
+        System.out.println("  Undo Split: '" + newDepartmentName
                 + "' merged back into '" + sourceDepartment.getName() + "'");
     }
 
     @Override
     public String getDescription() {
         return "SPLIT: '" + sourceDepartment.getName()
-                + "' → new department '" + newDepartmentName + "'";
+                + "' -> new department '" + newDepartmentName + "'";
     }
 }

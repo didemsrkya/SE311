@@ -2,18 +2,13 @@ package command;
 
 import model.Employee;
 
-/**
- * PromoteEmployeeCommand - Command Pattern'in Concrete Command sınıfı.
- * Bir çalışanı Manager unvanına terfi ettirir.
- * undo() çağrıldığında eski unvanına geri döner.
- * Factory Pattern ile birlikte çalışır (terfi işlemi nesne yaratmaz, sadece state değiştirir).
- */
+//concrete command class, promotes an employee
 public class PromoteEmployeeCommand implements HRCommand {
 
-    private Employee employee;
+    private Employee employee; 
     private String oldTitle;
     private String newTitle;
-    private double oldSalary;
+    private double oldSalary; //it gets old salary and old title in order to undo operation
     private double newSalary;
 
     public PromoteEmployeeCommand(Employee employee, String newTitle, double salaryIncrease) {
@@ -29,9 +24,9 @@ public class PromoteEmployeeCommand implements HRCommand {
         employee.setTitle(newTitle);
         employee.setSalary(newSalary);
         employee.setManager(true);
-        System.out.println("⬆️  Promoted: " + employee.getName()
-                + " | " + oldTitle + " → " + newTitle
-                + " | $" + oldSalary + " → $" + newSalary);
+        System.out.println("#  Promoted: " + employee.getName()
+                + " | " + oldTitle + " -> " + newTitle
+                + " | $" + oldSalary + "-> $" + newSalary);
     }
 
     @Override
@@ -39,13 +34,13 @@ public class PromoteEmployeeCommand implements HRCommand {
         employee.setTitle(oldTitle);
         employee.setSalary(oldSalary);
         employee.setManager(false);
-        System.out.println("↩️  Undo Promote: " + employee.getName()
+        System.out.println("  Undo Promote: " + employee.getName()
                 + " reverted to " + oldTitle);
     }
 
     @Override
     public String getDescription() {
         return "PROMOTE: " + employee.getName()
-                + " → " + newTitle + " (salary: $" + newSalary + ")";
+                + " -> " + newTitle + " (salary: $" + newSalary + ")";
     }
 }

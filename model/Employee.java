@@ -2,7 +2,6 @@ package model;
 
 import visitor.ReportVisitor;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 /**
  * Employee - Composite Pattern'in Leaf (yaprak) düğümü.
@@ -28,9 +27,10 @@ public class Employee implements OrgComponent {
         this.isManager = false;
     }
 
-    // Kaç yıldır şirkette olduğunu döner
     public long getYearsAtCompany() {
-        return ChronoUnit.YEARS.between(hireDate, LocalDate.now());
+        int currentYear = LocalDate.now().getYear();
+        int hireYear = hireDate.getYear();
+        return currentYear - hireYear;
     }
 
     @Override

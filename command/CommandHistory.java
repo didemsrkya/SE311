@@ -5,12 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * CommandHistory - Command Pattern'in audit log bileşeni.
- * Tüm execute edilen komutları zaman damgasıyla kaydeder.
- * Spec'te "logged for audit purposes" zorunluluğunu karşılar.
- * Aynı zamanda undo için geçmiş komut listesini tutar.
- */
+/** CommandHistory is an additional class for audit log system. It gets all the executed commands with their timestamps, it satisfies the
+ * "logged for audit purposes" requirement. At the same time, it holds the list of the history of commands to undo() operation
+ */ 
 public class CommandHistory {
 
     private List<HRCommand> history = new ArrayList<>();
@@ -23,12 +20,12 @@ public class CommandHistory {
         String entry = "[" + LocalDateTime.now().format(FORMATTER) + "] "
                 + command.getDescription();
         auditLog.add(entry);
-        System.out.println("📋 [AUDIT LOG] " + entry);
+        System.out.println("[AUDIT LOG] " + entry);
     }
 
     public HRCommand pop() {
         if (history.isEmpty()) return null;
-        return history.remove(history.size() - 1);
+        return history.remove(history.size() - 1); //removes the last command
     }
 
     public boolean isEmpty() {
@@ -36,16 +33,14 @@ public class CommandHistory {
     }
 
     public void printAuditLog() {
-        System.out.println("╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                     AUDIT LOG                           ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("--- AUDIT LOG ---");
         if (auditLog.isEmpty()) {
-            System.out.println("║  No operations recorded.                                ║");
+            System.out.println("No operations recorded.");
         } else {
             for (String entry : auditLog) {
-                System.out.println("║  " + entry);
+                System.out.println(entry);
             }
         }
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.println("-----------------");
     }
 }

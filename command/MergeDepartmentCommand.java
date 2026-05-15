@@ -22,25 +22,25 @@ public class MergeDepartmentCommand implements HRCommand {
     @Override
     public void execute() {
         target.merge(source); //calls the target departments merge() method 
-        System.out.println(" Merged: '" + source.getName()
+        System.out.println("  Merged: '" + source.getName()
                 + "' into '" + target.getName() + "'");
     }
 
     @Override
     public void undo() {
-        // Taşınan çocukları target'tan geri al
+        
         for (OrgComponent child : savedSourceChildren) {
             target.getChildren().remove(child); /*getChildren (composite pattern method) (gets the moved source's children 
                                                  and puts them back to the source (addChildren()))*/ 
             source.addChild(child);
         }
-        System.out.println("↩️  Undo Merge: '" + source.getName()
+        System.out.println("  Undo Merge: '" + source.getName()
                 + "' restored from '" + target.getName() + "'");
     }
 
     @Override
     public String getDescription() {
         return "MERGE: Department '" + source.getName()
-                + "' → '" + target.getName() + "'";
+                + "' -> '" + target.getName() + "'";
     }
 }

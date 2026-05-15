@@ -18,7 +18,7 @@ public class HireEmployeeCommand implements HRCommand {
     public void execute() { //triggers receiver (Team)
         targetTeam.addMember(newEmployee);
         System.out.println("Hired: " + newEmployee.getName()  
-                + " → Team: " + targetTeam.getName());
+                + " -> Team: " + targetTeam.getName());
     }
 
     @Override
@@ -31,6 +31,6 @@ public class HireEmployeeCommand implements HRCommand {
     @Override
     public String getDescription() { //prints the hired employee's information
         return "HIRE: " + newEmployee.getName()
-                + " [" + newEmployee.getTitle() + "] → Team: " + targetTeam.getName();
+                + " [" + newEmployee.getTitle() + "] -> Team: " + targetTeam.getName();
     }
 }
