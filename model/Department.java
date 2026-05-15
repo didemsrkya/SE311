@@ -107,7 +107,7 @@ public class Department implements OrgComponent, OrgSubject {
 
     @Override
     public void printDetails(String indent) {
-        System.out.println(indent + "🏢 Department: " + name);
+        System.out.println(indent + " Department: " + name);
         for (OrgComponent child : children) {
             child.printDetails(indent + "  ");
         }
