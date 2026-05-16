@@ -123,35 +123,66 @@ class DiversityReportVisitor implements ReportVisitor {
 
 // It is concrete visitor class
 class SeniorityReportVisitor implements ReportVisitor {
+ private static final int SENIORITY_THRESHOLD = 20;
+    private String currentDept = "";
+    private String currentTeam = "";
 
-    private static final int SENIORITY_THRESHOLD = 20;
-    private List<Employee> seniorEmployees = new ArrayList<>();
+    private Map<String, List<Employee>> deptSeniorMap = new LinkedHashMap<>(); //we keep senior employees for each department
+    private Map<String, List<Employee>> teamSeniorMap = new LinkedHashMap<>(); //we keep senior employees for each team
+    private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
+
+    @Override
+    public void visitDepartment(Department department) {
+        currentDept = department.getName();
+        currentTeam = "";
+        deptSeniorMap.put(currentDept, new ArrayList<>());
+        deptTeams.put(currentDept, new ArrayList<>());
+    }
+
+    @Override
+    public void visitTeam(Team team) {
+        currentTeam = team.getName();
+        teamSeniorMap.put(currentDept + "|" + currentTeam, new ArrayList<>());
+        deptTeams.get(currentDept).add(currentTeam);
+    }
 
     @Override
     public void visitEmployee(Employee employee) {
         //We are checking if the employee worked more than 20 years
         if (employee.getYearsAtCompany() >= SENIORITY_THRESHOLD) {
-            seniorEmployees.add(employee);
+            deptSeniorMap.get(currentDept).add(employee);
+            if (teamSeniorMap.containsKey(currentDept + "|" + currentTeam))
+                teamSeniorMap.get(currentDept + "|" + currentTeam).add(employee);
         }
     }
 
     @Override
-    public void visitTeam(Team team) { }
-
-    @Override
-    public void visitDepartment(Department department) { }
-
-    @Override
     public void printReport() {
         System.out.println(" SENIORITY REPORT");
-        if (seniorEmployees.isEmpty()) {
-            System.out.println(" No employees with 20+ years found.");
-        } else {
-            for (Employee e : seniorEmployees) {
-                System.out.printf("%-20s | %2d years | %-10s %n",
-                        e.getName(), e.getYearsAtCompany(), e.getTitle());
+        System.out.println("------------------------------------------------------------------------");
+
+        int totalSeniorCount = 0;
+        for (String dept : deptSeniorMap.keySet()) {
+            List<Employee> deptSeniors = deptSeniorMap.get(dept);
+            if(deptSeniors.size() == 0) //if there are no seniors in this department skip it
+                continue;
+            totalSeniorCount = totalSeniorCount + deptSeniors.size();
+            System.out.println(dept + ":");
+            for (String teamName : deptTeams.get(dept)) {
+                List<Employee> teamSeniors = teamSeniorMap.get(dept + "|" + teamName);
+                if(teamSeniors.size() == 0) //if there are no seniors in this team skip it
+                    continue;
+                System.out.println("   " + teamName + ":");
+                for (int i = 0; i < teamSeniors.size(); i++) {
+                    Employee e = teamSeniors.get(i);
+                    System.out.printf("      %-22s  %2d years  %s%n", e.getName(), e.getYearsAtCompany(), e.getTitle());
+                }
             }
         }
+        System.out.println("------------------------------------------------------------------------");
+        System.out.println("Total senior employees : " + totalSeniorCount);
+        if(totalSeniorCount == 0)
+            System.out.println(" No employees with 20+ years found.");
     }
 }
 
