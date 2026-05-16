@@ -29,37 +29,93 @@ class DiversityReportVisitor implements ReportVisitor {
 
     private int maleCount = 0;
     private int femaleCount = 0;
+    private String currentDept = ""; //we need this to know which department we are in
+    private String currentTeam = ""; //we need this to know which team we are in
+
+    private Map<String, int[]> deptData = new LinkedHashMap<>(); //department name -> [male count, female count]
+    private Map<String, int[]> teamData = new LinkedHashMap<>(); //dept|team name -> [male count, female count]
+    private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep teams of each department here
+
+    @Override
+    public void visitDepartment(Department department) {
+        //when we visit a department we save its name and create empty arrays for counting
+        currentDept = department.getName();
+        currentTeam = "";
+        deptData.put(currentDept, new int[]{0, 0});
+        deptTeams.put(currentDept, new ArrayList<>());
+    }
+
+    @Override
+    public void visitTeam(Team team) {
+        //when we visit a team we save its name and add it to the department's team list
+        currentTeam = team.getName();
+        teamData.put(currentDept + "|" + currentTeam, new int[]{0, 0});
+        deptTeams.get(currentDept).add(currentTeam);
+    }
 
     @Override
     public void visitEmployee(Employee employee) {
         //In here we visit each employee and count the number of male and female employees
         if (employee.getGender().equalsIgnoreCase("Male")) {
             maleCount++;
+            deptData.get(currentDept)[0]++;
+            if (teamData.containsKey(currentDept + "|" + currentTeam))
+                teamData.get(currentDept + "|" + currentTeam)[0]++;
         } else {
             femaleCount++;
+            deptData.get(currentDept)[1]++;
+            if (teamData.containsKey(currentDept + "|" + currentTeam))
+                teamData.get(currentDept + "|" + currentTeam)[1]++;
         }
     }
-
-    @Override
-    public void visitTeam(Team team) {}
-
-    @Override
-    public void visitDepartment(Department department) {}
 
     @Override
     public void printReport() {
         int total = maleCount + femaleCount; //all employees
         System.out.println(" DIVERSITY REPORT");
-        System.out.println("Total Employees : " + total);
+        System.out.println("------------------------------------------------------------------------");
+
+        //print department and team breakdown
+        for (String dept : deptData.keySet()) {
+            int deptMaleCount = deptData.get(dept)[0];
+            int deptFemaleCount = deptData.get(dept)[1];
+            int deptTotalCount = deptMaleCount + deptFemaleCount;
+            double deptMalePercent = 0;
+            double deptFemalePercent = 0;
+           if(deptTotalCount > 0) {
+                deptMalePercent = deptMaleCount * 100.0 / deptTotalCount;
+                deptFemalePercent = deptFemaleCount * 100.0 / deptTotalCount;
+            }
+            System.out.printf("%n%-18s Male: %d (%.1f%%)  Female: %d (%.1f%%)%n",
+                    dept, deptMaleCount, deptMalePercent, deptFemaleCount, deptFemalePercent);
+
+            //print team breakdown under the department
+            for (String teamName : deptTeams.get(dept)) {
+                 int[] teamCounts = teamData.get(dept + "|" + teamName);
+                int teamTotalCount = teamCounts[0] + teamCounts[1];
+                double teamMalePercent = 0;
+                double teamFemalePercent = 0;
+                if(teamTotalCount > 0) {
+                    teamMalePercent = teamCounts[0] * 100.0 / teamTotalCount;
+                    teamFemalePercent = teamCounts[1] * 100.0 / teamTotalCount;
+                }
+                System.out.printf("   %-18s Male: %d (%.1f%%)  Female: %d (%.1f%%)%n",
+                         teamName, teamCounts[0], teamMalePercent, teamCounts[1], teamFemalePercent);
+            }
+        }
+
+        //print total at the bottom
+        System.out.println("------------------------------------------------------------------------");
         // We are calculating the percentage of male and female employees.
         double percentageOfMen = 0;
         double percentageOfFemale = 0;
-        if (total > 0) {
+        if(total > 0) {
             percentageOfMen = maleCount * 100.0 / total;
             percentageOfFemale = femaleCount * 100.0 / total;
         }
-        System.out.printf("Male            : %d (%.1f%%)%n", maleCount, percentageOfMen);
-        System.out.printf("Female          : %d (%.1f%%)%n", femaleCount, percentageOfFemale);
+        System.out.printf("Total Male            : %d (%.1f%%)%n", maleCount, percentageOfMen);
+        System.out.printf("Total Female          : %d (%.1f%%)%n", femaleCount, percentageOfFemale);
+        System.out.println("------------------------------------------------------------------------");
     }
 }
 
