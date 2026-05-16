@@ -196,6 +196,27 @@ class SalaryBandReportVisitor implements ReportVisitor {
     private int seniorCount = 0;   // If the salary is greater than 100 000
     private double totalSalary = 0;
     private int totalEmployees = 0;
+    private String currentDept = "";
+    private String currentTeam = "";
+
+    private Map<String, double[]> deptSalaryMap = new LinkedHashMap<>(); //dept -> [totalSalary, employeeCount]
+    private Map<String, double[]> teamSalaryMap = new LinkedHashMap<>(); //dept|team -> [totalSalary, employeeCount]
+    private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
+
+    @Override
+    public void visitDepartment(Department department) {
+        currentDept = department.getName();
+        currentTeam = "";
+        deptSalaryMap.put(currentDept, new double[]{0, 0});
+        deptTeams.put(currentDept, new ArrayList<>());
+    }
+
+    @Override
+    public void visitTeam(Team team) {
+        currentTeam = team.getName();
+        teamSalaryMap.put(currentDept + "|" + currentTeam, new double[]{0, 0});
+        deptTeams.get(currentDept).add(currentTeam);
+    }
 
     @Override
     public void visitEmployee(Employee employee) {
@@ -203,29 +224,57 @@ class SalaryBandReportVisitor implements ReportVisitor {
         totalSalary += salary;
         totalEmployees++;
         //We are deciding the employees position
-        if (salary < 50_000) {
+        if (salary < 50000) {
             juniorCount++;
-        } else if (salary <= 100_000) {
+        } else if (salary <= 100000) {
             midCount++;
         } else {
             seniorCount++;
         }
+        deptSalaryMap.get(currentDept)[0] += salary;
+        deptSalaryMap.get(currentDept)[1]++;
+        if (teamSalaryMap.containsKey(currentDept + "|" + currentTeam)) {
+            teamSalaryMap.get(currentDept + "|" + currentTeam)[0] += salary;
+            teamSalaryMap.get(currentDept + "|" + currentTeam)[1]++;
+        }
     }
 
     @Override
-    public void visitTeam(Team team) { }
-
-    @Override
-    public void visitDepartment(Department department) { }
-
-    @Override
     public void printReport() {
-        double avg = totalEmployees > 0 ? totalSalary / totalEmployees : 0;
         System.out.println(" SALARY BAND REPORT");
-        System.out.println("Junior          : " + juniorCount + " employees earn less than 50 000");
-        System.out.println("Mid             : " + midCount + " employees earn between 50 000 and 100 000");
-        System.out.println("Senior          : " + seniorCount + " employees earn greater than 100 000");
-        System.out.printf( "Average Salary  : $%.2f%n", avg);
+        System.out.println("------------------------------------------------------------------------");
+        System.out.println("Junior          : " + juniorCount + " employees  (salary < 50 000)");
+        System.out.println("Mid             : " + midCount + " employees  (50 000 - 100 000)");
+        System.out.println("Senior          : " + seniorCount + " employees  (salary > 100 000)");
+        System.out.println("------------------------------------------------------------------------");
+
+        //print department and team salary breakdown
+        for (String dept : deptSalaryMap.keySet()) {
+            double deptTotalSalary = deptSalaryMap.get(dept)[0];
+            double deptEmployeeCount = deptSalaryMap.get(dept)[1];
+            double deptAvgSalary = 0;
+            if(deptEmployeeCount > 0)
+                deptAvgSalary = deptTotalSalary / deptEmployeeCount;
+
+            System.out.printf("%n%-18s  Avg: $%.2f%n", dept, deptAvgSalary);
+
+            //print team breakdown under the department
+            for (String teamName : deptTeams.get(dept)) {
+                double[] teamData = teamSalaryMap.get(dept + "|" + teamName);
+                double teamAvgSalary = 0;
+                if(teamData[1] > 0)
+                    teamAvgSalary = teamData[0] / teamData[1];
+                System.out.printf("   %-18s  Avg: $%.2f%n", teamName, teamAvgSalary);
+            }
+        }
+
+        System.out.println("------------------------------------------------------------------------");
+        double avgSalary = 0;
+        if(totalEmployees > 0)
+            avgSalary = totalSalary / totalEmployees;
+        System.out.printf("Total Employees : %d%n", totalEmployees);
+        System.out.printf("Overall Avg     : $%.2f%n", avgSalary);
+        System.out.println("------------------------------------------------------------------------");
     }
 }
 
@@ -276,6 +325,103 @@ class HeadcountReportVisitor implements ReportVisitor {
             System.out.printf("%-15s : %3d employees%-60s %n", deptName, count, teamPart);
         }
         System.out.println("TOTAL           :   " + total + " employees");
+    }
+}
+
+// ────────────────────────────────────────────────────────
+
+// It is concrete visitor class
+class HireDateReportVisitor implements ReportVisitor {
+
+    private String currentDept = "";
+    private String currentTeam = "";
+
+    private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
+
+    // year -> list of employee names hired that year
+    private Map<Integer, List<String>> yearMap = new LinkedHashMap<>();
+
+    // dept -> year -> list of employee names
+    private Map<String, Map<Integer, List<String>>> deptYearMap = new LinkedHashMap<>();
+
+    // dept|team -> year -> list of employee names
+    private Map<String, Map<Integer, List<String>>> teamYearMap = new LinkedHashMap<>();
+
+    @Override
+    public void visitDepartment(Department department) {
+        currentDept = department.getName();
+        currentTeam = "";
+        deptYearMap.put(currentDept, new LinkedHashMap<>());
+        deptTeams.put(currentDept, new ArrayList<>());
+    }
+
+    @Override
+    public void visitTeam(Team team) {
+        currentTeam = team.getName();
+        teamYearMap.put(currentDept + "|" + currentTeam, new LinkedHashMap<>());
+        deptTeams.get(currentDept).add(currentTeam);
+    }
+
+    @Override
+    public void visitEmployee(Employee employee) {
+        int hireYear = employee.getHireDate().getYear();
+        String employeeName = employee.getName();
+
+        //add to overall year map
+        if (!yearMap.containsKey(hireYear))
+            yearMap.put(hireYear, new ArrayList<>());
+        yearMap.get(hireYear).add(employeeName);
+
+        //add to department year map
+        Map<Integer, List<String>> deptYears = deptYearMap.get(currentDept);
+        if (!deptYears.containsKey(hireYear))
+            deptYears.put(hireYear, new ArrayList<>());
+        deptYears.get(hireYear).add(employeeName);
+
+        //add to team year map
+        String teamKey = currentDept + "|" + currentTeam;
+        if (teamYearMap.containsKey(teamKey)) {
+            Map<Integer, List<String>> teamYears = teamYearMap.get(teamKey);
+            if (!teamYears.containsKey(hireYear))
+                teamYears.put(hireYear, new ArrayList<>());
+            teamYears.get(hireYear).add(employeeName);
+        }
+    }
+
+    @Override
+    public void printReport() {
+        System.out.println(" HIRE DATE REPORT");
+        System.out.println("------------------------------------------------------------------------");
+
+        //print department and team breakdown by year
+        for (String dept : deptYearMap.keySet()) {
+            Map<Integer, List<String>> deptYears = deptYearMap.get(dept);
+            if (deptYears.isEmpty())
+                continue;
+            System.out.println(dept + ":");
+
+            for (String teamName : deptTeams.get(dept)) {
+                Map<Integer, List<String>> teamYears = teamYearMap.get(dept + "|" + teamName);
+                if (teamYears == null || teamYears.isEmpty())
+                    continue;
+                System.out.println("   " + teamName + ":");
+                for (int year : teamYears.keySet()) {
+                    List<String> names = teamYears.get(year);
+                    for (int i = 0; i < names.size(); i++) {
+                        System.out.printf("      %-22s  hired: %d%n", names.get(i), year);
+                    }
+                }
+            }
+        }
+
+        //print overall yearly summary at the bottom
+        System.out.println("------------------------------------------------------------------------");
+        System.out.println("Yearly Summary:");
+        for (int year : yearMap.keySet()) {
+            int count = yearMap.get(year).size();
+            System.out.println("   " + year + "  :  " + count + " employee(s) hired");
+        }
+        System.out.println("------------------------------------------------------------------------");
     }
 }
 

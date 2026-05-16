@@ -118,6 +118,9 @@ public class Main {
 
         System.out.println("\n--- Report 4: Headcount by Department ---");
         manager.generateReport(new HeadcountReportVisitor());
+        
+        System.out.println("\n--- Report 5: Hire Date by Year ---");
+        manager.generateReport(new HireDateReportVisitor());
 
         // ─── Audit Log ───────────────────────────────────────────────
         System.out.println("\n**** [COMMAND] Audit Log ****");
