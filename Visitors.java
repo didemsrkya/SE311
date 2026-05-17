@@ -286,7 +286,7 @@ class SalaryBandReportVisitor implements ReportVisitor {
             if(d[7] > 0)
                 deptSeniorAvg = d[6] / d[7];
 
-            System.out.printf("%n%-18s  Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n%n",
+            System.out.printf("%n%-18s -> Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n%n",
                     dept, deptAvg, deptJuniorAvg, deptMidAvg, deptSeniorAvg);
 
             //print team breakdown under the department
@@ -304,7 +304,7 @@ class SalaryBandReportVisitor implements ReportVisitor {
                 double teamSeniorAvg = 0;
                 if(t[7] > 0)
                     teamSeniorAvg = t[6] / t[7];
-                System.out.printf("      %-18s Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n",
+                System.out.printf("      %-18s -> Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n",
                         teamName, teamAvg, teamJuniorAvg, teamMidAvg, teamSeniorAvg);
             }
         }
