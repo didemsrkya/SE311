@@ -3,13 +3,17 @@
 // [DUYGU SÖĞÜTDALLI]
 // [YAĞMUR DAĞDEMİR]
 // [EFE YOLARTIRAN]
-
-package newversion;
 import java.time.LocalDate;
 
 // ════════════════════════════════════════════════════════
 //  FACTORY PATTERN  —  AbstractFactory / ConcreteFactory
 // ════════════════════════════════════════════════════════
+// Participant mapping:
+// Abstract Factory: OrgComponentFactory
+// Concrete Factory: HRFactory
+// Abstract Products: OrgComponent-compatible organization objects
+// Concrete Products: Employee, Team, Department
+// Client: Main requests objects through OrgComponentFactory instead of using constructors directly
 
 /**
  * OrgComponentFactory - Interface of the Factory Pattern.

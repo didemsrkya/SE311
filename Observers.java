@@ -8,7 +8,13 @@
 // ════════════════════════════════════════════════════════
 //  OBSERVER PATTERN  —  Subject / Observer / ConcreteObserver
 // ════════════════════════════════════════════════════════
-package newversion;
+// Participant mapping:
+// Subject interface: OrgSubject
+// Concrete Subject: Department, implemented in Models.java
+// Observer interface: OrgObserver
+// Concrete Observer: CorporateHead
+// Events: Department.merge() and Department.split() notify registered observers
+
 /**
  * OrgObserver - Observer Pattern'in Observer arayüzü.
  * Organizasyonel değişikliklerden haberdar olmak isteyen
