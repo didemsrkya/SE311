@@ -221,7 +221,7 @@ class SalaryBandReportVisitor implements ReportVisitor {
         double salary = employee.getSalary();
         totalSalary += salary;
         totalEmployees++;
-        //We are deciding the employees position
+        //We are deciding the employees position, totalIdx and countIdx is used for the array [totalSalary, count, juniorTotal, juniorCount, midTotal, midCount, seniorTotal, seniorCount]
         int totalIdx, countIdx;
         if (salary < 50000) {
             juniorCount++;
@@ -382,10 +382,10 @@ class HireDateReportVisitor implements ReportVisitor {
     // year and list of employee names hired that year
     private Map<Integer, List<String>> yearMap = new LinkedHashMap<>();
 
-    // year for each department and list of employee names
+    // we keep the employees hired in each department by year
     private Map<String, Map<Integer, List<String>>> deptYearMap = new LinkedHashMap<>();
 
-    // year for each team in the department and list of employee names
+    // we keep the employees hired in each team by year
     private Map<String, Map<Integer, List<String>>> teamYearMap = new LinkedHashMap<>();
 
     @Override
