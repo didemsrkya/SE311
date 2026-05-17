@@ -13,8 +13,8 @@ import java.util.Map;
 // Visitor: ReportVisitor
 // Concrete Visitors: DiversityReportVisitor, SeniorityReportVisitor,
 // SalaryBandReportVisitor, HeadcountReportVisitor, HireDateReportVisitor
-// Elements: Employee, Team, Department
-// Element accept methods: OrgComponent
+// Element: OrgComponent
+// Concrete Element : Employee, Team, Department
 // Object Structure: OrgChartManager stores departments and starts traversal
 // Client: Main selects which report visitor to run
 
