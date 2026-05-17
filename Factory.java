@@ -3,8 +3,6 @@
 // [DUYGU SÖĞÜTDALLI]
 // [YAĞMUR DAĞDEMİR]
 // [EFE YOLARTIRAN]
-
-
 import java.time.LocalDate;
 
 // ════════════════════════════════════════════════════════
