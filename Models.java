@@ -26,11 +26,6 @@ interface OrgComponent {
 
 // ────────────────────────────────────────────────────────
 
-/**
- * Employee - Composite Pattern'in Leaf (yaprak) düğümü.
- * Alt eleman barındırmaz. Bir çalışanın tüm bilgilerini tutar.
- * Factory Pattern aracılığıyla oluşturulur.
- */
 //It is our the concrete element of our visitor pattern.
 class Employee implements OrgComponent {
 
@@ -87,11 +82,6 @@ class Employee implements OrgComponent {
 
 // ────────────────────────────────────────────────────────
 
-/**
- * Team - Composite Pattern'in ara düğümü.
- * Employee nesnelerini gruplar. Bir Department altında yer alır.
- * accept() metoduyla Visitor tüm üyelerini ziyaret edebilir.
- */
 //It is our the concrete element of our visitor pattern.
 class Team implements OrgComponent {
 
@@ -139,12 +129,6 @@ class Team implements OrgComponent {
 
 // ────────────────────────────────────────────────────────
 
-/**
- * Department - Composite Pattern'in kök düğümü.
- * Team nesnelerini gruplar. OrgSubject arayüzünü de uygular,
- * bu sayede merge/split olaylarında Observer'lara bildirim gönderir.
- * Observer Pattern ile doğrudan bağlantılıdır.
- */
 //It is our the concrete element of our visitor pattern.
 class Department implements OrgComponent, OrgSubject {
 
@@ -158,8 +142,6 @@ class Department implements OrgComponent, OrgSubject {
         this.observers = new ArrayList<>();
     }
 
-    // ── Composite Metotları ──────────────────────────────────────
-
     public void addChild(OrgComponent component) {
         children.add(component);
     }
@@ -172,10 +154,6 @@ class Department implements OrgComponent, OrgSubject {
         return children;
     }
 
-    /**
-     * merge: Başka bir departmanın tüm çocuklarını bu departmana taşır.
-     * İşlem sonunda Observer'lara bildirim gönderir.
-     */
     public void merge(Department other) {
         for (OrgComponent child : other.getChildren()) {
             this.children.add(child);
@@ -185,17 +163,12 @@ class Department implements OrgComponent, OrgSubject {
                 + "' merged into '" + this.name + "'");
     }
 
-    /**
-     * split: Bu departmandan belirli takımları ayırarak yeni bir departman oluşturur.
-     * İşlem sonunda Observer'lara bildirim gönderir.
-     */
     public Department split(String newDeptName, List<OrgComponent> teamsToSplit) {
         Department newDept = new Department(newDeptName);
         for (OrgComponent team : teamsToSplit) {
             newDept.addChild(team);
             this.children.remove(team);
         }
-        // Yeni dept aynı observer'ları paylaşır
         for (OrgObserver obs : observers) {
             newDept.addObserver(obs);
         }
@@ -203,8 +176,6 @@ class Department implements OrgComponent, OrgSubject {
                 + "' split — new department '" + newDeptName + "' created");
         return newDept;
     }
-
-    // ── Observer Metotları ───────────────────────────────────────
 
     @Override
     public void addObserver(OrgObserver observer) {
@@ -222,8 +193,6 @@ class Department implements OrgComponent, OrgSubject {
             observer.update(event);
         }
     }
-
-    // ── OrgComponent Metotları ───────────────────────────────────
 
     @Override
     public String getName() {

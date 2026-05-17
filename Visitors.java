@@ -209,6 +209,13 @@ class SalaryBandReportVisitor implements ReportVisitor {
     private Map<String, double[]> teamSalaryMap = new LinkedHashMap<>();
     private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
 
+    private String formatAverage(double totalSalary, double employeeCount) {
+        if (employeeCount == 0) {
+            return "N/A";
+        }
+        return String.format("$%.2f", totalSalary / employeeCount);
+    }
+
     @Override
     public void visitDepartment(Department department) {
         currentDept = department.getName();
@@ -271,60 +278,36 @@ class SalaryBandReportVisitor implements ReportVisitor {
         //print department and team salary breakdown
         for (String dept : deptSalaryMap.keySet()) {
             double[] d = deptSalaryMap.get(dept);
-            double deptAvg = 0;
-            if(d[1] > 0)
-                deptAvg = d[0] / d[1];
-            double deptJuniorAvg = 0;
-            if(d[3] > 0)
-                deptJuniorAvg = d[2] / d[3];
-            double deptMidAvg = 0;
-            if(d[5] > 0)
-                deptMidAvg = d[4] / d[5];
-            double deptSeniorAvg = 0;
-            if(d[7] > 0)
-                deptSeniorAvg = d[6] / d[7];
+            String deptAvg = formatAverage(d[0], d[1]);
+            String deptJuniorAvg = formatAverage(d[2], d[3]);
+            String deptMidAvg = formatAverage(d[4], d[5]);
+            String deptSeniorAvg = formatAverage(d[6], d[7]);
 
-            System.out.printf("%n%-18s -> Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n%n",
+            System.out.printf("%n%-18s -> Avg: %s  Junior Avg: %s  Mid Avg: %s  Senior Avg: %s%n%n",
                     dept, deptAvg, deptJuniorAvg, deptMidAvg, deptSeniorAvg);
 
             //print team breakdown under the department
             for (String teamName : deptTeams.get(dept)) {
                 double[] t = teamSalaryMap.get(dept + "|" + teamName);
-                double teamAvg = 0;
-                if(t[1] > 0)
-                    teamAvg = t[0] / t[1];
-                double teamJuniorAvg = 0;
-                if(t[3] > 0)
-                    teamJuniorAvg = t[2] / t[3];
-                double teamMidAvg = 0;
-                if(t[5] > 0)
-                    teamMidAvg = t[4] / t[5];
-                double teamSeniorAvg = 0;
-                if(t[7] > 0)
-                    teamSeniorAvg = t[6] / t[7];
-                System.out.printf("      %-18s -> Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n",
+                String teamAvg = formatAverage(t[0], t[1]);
+                String teamJuniorAvg = formatAverage(t[2], t[3]);
+                String teamMidAvg = formatAverage(t[4], t[5]);
+                String teamSeniorAvg = formatAverage(t[6], t[7]);
+                System.out.printf("      %-18s -> Avg: %s  Junior Avg: %s  Mid Avg: %s  Senior Avg: %s%n",
                         teamName, teamAvg, teamJuniorAvg, teamMidAvg, teamSeniorAvg);
             }
         }
 
         System.out.println("------------------------------------------------------------------------");
-        double avgSalary = 0;
-        if(totalEmployees > 0)
-            avgSalary = totalSalary / totalEmployees;
-        double overallJuniorAvg = 0;
-        if(juniorCount > 0)
-            overallJuniorAvg = juniorTotalSalary / juniorCount;
-        double overallMidAvg = 0;
-        if(midCount > 0)
-            overallMidAvg = midTotalSalary / midCount;
-        double overallSeniorAvg = 0;
-        if(seniorCount > 0)
-            overallSeniorAvg = seniorTotalSalary / seniorCount;
+        String avgSalary = formatAverage(totalSalary, totalEmployees);
+        String overallJuniorAvg = formatAverage(juniorTotalSalary, juniorCount);
+        String overallMidAvg = formatAverage(midTotalSalary, midCount);
+        String overallSeniorAvg = formatAverage(seniorTotalSalary, seniorCount);
         System.out.printf("Total Employees : %d%n", totalEmployees);
-        System.out.printf("Overall Avg     : $%.2f%n", avgSalary);
-        System.out.printf("Junior Avg      : $%.2f%n", overallJuniorAvg);
-        System.out.printf("Mid Avg         : $%.2f%n", overallMidAvg);
-        System.out.printf("Senior Avg      : $%.2f%n", overallSeniorAvg);
+        System.out.printf("Overall Avg     : %s%n", avgSalary);
+        System.out.printf("Junior Avg      : %s%n", overallJuniorAvg);
+        System.out.printf("Mid Avg         : %s%n", overallMidAvg);
+        System.out.printf("Senior Avg      : %s%n", overallSeniorAvg);
         System.out.println("------------------------------------------------------------------------");
     }
 }

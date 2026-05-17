@@ -167,7 +167,7 @@ class MergeDepartmentCommand implements HRCommand {
     @Override
     public void execute() {
         target.merge(source);
-        OrgChartManager.getInstance().removeDepartment(source); // ekle
+        OrgChartManager.getInstance().removeDepartment(source);
         System.out.println("Merged: '" + source.getName()
                 + "' into '" + target.getName() + "'");;
     }
@@ -178,7 +178,7 @@ class MergeDepartmentCommand implements HRCommand {
             target.getChildren().remove(child);
             source.addChild(child);
         }
-        OrgChartManager.getInstance().addDepartment(source); // ekle
+        OrgChartManager.getInstance().addDepartment(source);
         System.out.println("Undo Merge: '" + source.getName()
                 + "' restored from '" + target.getName() + "'");
     }
