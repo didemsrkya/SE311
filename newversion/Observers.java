@@ -8,7 +8,7 @@
 // ════════════════════════════════════════════════════════
 //  OBSERVER PATTERN  —  Subject / Observer / ConcreteObserver
 // ════════════════════════════════════════════════════════
-
+package newversion;
 /**
  * OrgObserver - Observer Pattern'in Observer arayüzü.
  * Organizasyonel değişikliklerden haberdar olmak isteyen

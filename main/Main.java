@@ -40,23 +40,23 @@ public class Main {
 
         // Departments
         Department engineering = factory.createDepartment("Engineering");
-        Department marketing   = factory.createDepartment("Marketing");
-        Department finance     = factory.createDepartment("Finance");
+        Department marketing = factory.createDepartment("Marketing");
+        Department finance = factory.createDepartment("Finance");
 
         // Teams
-        Team backendTeam  = factory.createTeam("Backend Team");
+        Team backendTeam = factory.createTeam("Backend Team");
         Team frontendTeam = factory.createTeam("Frontend Team");
-        Team adsTeam      = factory.createTeam("Ads Team");
-        Team financeTeam  = factory.createTeam("Finance Team");
+        Team adsTeam = factory.createTeam("Ads Team");
+        Team financeTeam = factory.createTeam("Finance Team");
 
         // Employees
-        Employee emp1 = factory.createEmployee("Duygu Sogutdalli",   "Female",   LocalDate.of(2001, 3, 15), 95000, "Senior Developer");
-        Employee emp2 = factory.createEmployee("Yagmur Dagdemir", "Female", LocalDate.of(2018, 7, 1),  72000, "Developer");
-        Employee emp3 = factory.createEmployee("Didem Sarikaya", "Female",   LocalDate.of(1999, 1, 20), 88000, "Developer");
-        Employee emp4 = factory.createEmployee("Efe Yolartiran",  "Male", LocalDate.of(2020, 5, 10), 65000, "Junior Developer");
-        Employee emp5 = factory.createEmployee("Semih Yagci",   "Male",   LocalDate.of(2015, 9, 5),  78000, "Marketing Lead");
-        Employee emp6 = factory.createEmployee("Tony Stark",   "Male", LocalDate.of(2003, 2, 28), 91000, "Senior Analyst");
-        Employee mgr1 = factory.createManager("Ufuk Celikkan",  "Male",   LocalDate.of(1998, 6, 12), 130000);
+        Employee emp1 = factory.createEmployee("Duygu Sogutdalli", "Female", LocalDate.of(2001, 3, 15), 95000, "Senior Developer");
+        Employee emp2 = factory.createEmployee("Yagmur Dagdemir", "Female", LocalDate.of(2018, 7, 1), 72000, "Developer");
+        Employee emp3 = factory.createEmployee("Didem Sarikaya", "Female", LocalDate.of(1999, 1, 20), 88000, "Developer");
+        Employee emp4 = factory.createEmployee("Efe Yolartiran", "Male", LocalDate.of(2020, 5, 10), 65000, "Junior Developer");
+        Employee emp5 = factory.createEmployee("Semih Yagci", "Male", LocalDate.of(2015, 9, 5), 78000, "Marketing Lead");
+        Employee emp6 = factory.createEmployee("Tony Stark", "Male", LocalDate.of(2003, 2, 28), 91000, "Senior Analyst");
+        Employee mgr1 = factory.createManager("Ufuk Celikkan", "Male", LocalDate.of(1998, 6, 12), 130000);
 
         // ─── 4. COMPOSITE ────────────────────────────────────────────
         System.out.println("\n**** [COMPOSITE] Building hierarchy ****");
@@ -130,7 +130,7 @@ public class Main {
         System.out.println("\n**** [COMMAND] Audit Log ****");
         manager.printAuditLog();
 
-        System.out.println("\n!!!!!! Demo complete !!!!!!"); 
-
+        System.out.println("\n!!!!!! Demo complete !!!!!!");
+    }
     
 }

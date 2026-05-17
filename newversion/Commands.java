@@ -4,7 +4,7 @@
 // [YAĞMUR DAĞDEMİR]
 // [EFE YOLARTIRAN]
 
-
+package newversion;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -162,19 +162,20 @@ class MergeDepartmentCommand implements HRCommand {
 
     @Override
     public void execute() {
-        target.merge(source); //calls the target departments merge() method
-        System.out.println("  Merged: '" + source.getName()
-                + "' into '" + target.getName() + "'");
+        target.merge(source);
+        OrgChartManager.getInstance().removeDepartment(source); // ekle
+        System.out.println("Merged: '" + source.getName()
+                + "' into '" + target.getName() + "'");;
     }
 
     @Override
     public void undo() {
         for (OrgComponent child : savedSourceChildren) {
-            target.getChildren().remove(child); /*getChildren (composite pattern method) (gets the moved source's children
-                                                 and puts them back to the source (addChildren()))*/
+            target.getChildren().remove(child);
             source.addChild(child);
         }
-        System.out.println("  Undo Merge: '" + source.getName()
+        OrgChartManager.getInstance().addDepartment(source); // ekle
+        System.out.println("Undo Merge: '" + source.getName()
                 + "' restored from '" + target.getName() + "'");
     }
 
