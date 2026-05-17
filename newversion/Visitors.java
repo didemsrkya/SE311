@@ -190,22 +190,29 @@ class SalaryBandReportVisitor implements ReportVisitor {
     private String currentDept = "";
     private String currentTeam = "";
 
-    private Map<String, double[]> deptSalaryMap = new LinkedHashMap<>(); //dept , [totalSalary, employeeCount]
-    private Map<String, double[]> teamSalaryMap = new LinkedHashMap<>(); //dept|team, [totalSalary, employeeCount]
+    // overall band salary totals for final summary
+    private double juniorTotalSalary = 0;
+    private double midTotalSalary = 0;
+    private double seniorTotalSalary = 0;
+
+    // for department the datas we are keeping dept, [totalSalary, count, juniorTotal, juniorCount, midTotal, midCount, seniorTotal, seniorCount]
+    private Map<String, double[]> deptSalaryMap = new LinkedHashMap<>();
+    // for team the datas we are keeping in that department dept|team, [totalSalary, count, juniorTotal, juniorCount, midTotal, midCount, seniorTotal, seniorCount]
+    private Map<String, double[]> teamSalaryMap = new LinkedHashMap<>();
     private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
 
     @Override
     public void visitDepartment(Department department) {
         currentDept = department.getName();
         currentTeam = "";
-        deptSalaryMap.put(currentDept, new double[]{0, 0});
+        deptSalaryMap.put(currentDept, new double[]{0, 0, 0, 0, 0, 0, 0, 0});
         deptTeams.put(currentDept, new ArrayList<>());
     }
 
     @Override
     public void visitTeam(Team team) {
         currentTeam = team.getName();
-        teamSalaryMap.put(currentDept + "|" + currentTeam, new double[]{0, 0});
+        teamSalaryMap.put(currentDept + "|" + currentTeam, new double[]{0, 0, 0, 0, 0, 0, 0, 0});
         deptTeams.get(currentDept).add(currentTeam);
     }
 
@@ -215,18 +222,32 @@ class SalaryBandReportVisitor implements ReportVisitor {
         totalSalary += salary;
         totalEmployees++;
         //We are deciding the employees position
+        int totalIdx, countIdx;
         if (salary < 50000) {
             juniorCount++;
+            juniorTotalSalary += salary;
+            totalIdx = 2; 
+            countIdx = 3;
         } else if (salary <= 100000) {
             midCount++;
+            midTotalSalary += salary;
+            totalIdx = 4; 
+            countIdx = 5;
         } else {
             seniorCount++;
+            seniorTotalSalary += salary;
+            totalIdx = 6; 
+            countIdx = 7;
         }
         deptSalaryMap.get(currentDept)[0] += salary;
         deptSalaryMap.get(currentDept)[1]++;
+        deptSalaryMap.get(currentDept)[totalIdx] += salary;
+        deptSalaryMap.get(currentDept)[countIdx]++;
         if (teamSalaryMap.containsKey(currentDept + "|" + currentTeam)) {
             teamSalaryMap.get(currentDept + "|" + currentTeam)[0] += salary;
             teamSalaryMap.get(currentDept + "|" + currentTeam)[1]++;
+            teamSalaryMap.get(currentDept + "|" + currentTeam)[totalIdx] += salary;
+            teamSalaryMap.get(currentDept + "|" + currentTeam)[countIdx]++;
         }
     }
 
@@ -241,21 +262,40 @@ class SalaryBandReportVisitor implements ReportVisitor {
 
         //print department and team salary breakdown
         for (String dept : deptSalaryMap.keySet()) {
-            double deptTotalSalary = deptSalaryMap.get(dept)[0];
-            double deptEmployeeCount = deptSalaryMap.get(dept)[1];
-            double deptAvgSalary = 0;
-            if(deptEmployeeCount > 0)
-                deptAvgSalary = deptTotalSalary / deptEmployeeCount;
+            double[] d = deptSalaryMap.get(dept);
+            double deptAvg = 0;
+            if(d[1] > 0)
+                deptAvg = d[0] / d[1];
+            double deptJuniorAvg = 0;
+            if(d[3] > 0)
+                deptJuniorAvg = d[2] / d[3];
+            double deptMidAvg = 0;
+            if(d[5] > 0)
+                deptMidAvg = d[4] / d[5];
+            double deptSeniorAvg = 0;
+            if(d[7] > 0)
+                deptSeniorAvg = d[6] / d[7];
 
-            System.out.printf("%n%-18s  Avg: $%.2f%n", dept, deptAvgSalary);
+            System.out.printf("%n%-18s  Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n%n",
+                    dept, deptAvg, deptJuniorAvg, deptMidAvg, deptSeniorAvg);
 
             //print team breakdown under the department
             for (String teamName : deptTeams.get(dept)) {
-                double[] teamData = teamSalaryMap.get(dept + "|" + teamName);
-                double teamAvgSalary = 0;
-                if(teamData[1] > 0)
-                    teamAvgSalary = teamData[0] / teamData[1];
-                System.out.printf("   %-18s  Avg: $%.2f%n", teamName, teamAvgSalary);
+                double[] t = teamSalaryMap.get(dept + "|" + teamName);
+                double teamAvg = 0;
+                if(t[1] > 0)
+                    teamAvg = t[0] / t[1];
+                double teamJuniorAvg = 0;
+                if(t[3] > 0)
+                    teamJuniorAvg = t[2] / t[3];
+                double teamMidAvg = 0;
+                if(t[5] > 0)
+                    teamMidAvg = t[4] / t[5];
+                double teamSeniorAvg = 0;
+                if(t[7] > 0)
+                    teamSeniorAvg = t[6] / t[7];
+                System.out.printf("      %-18s Avg: $%.2f  Junior Avg: $%.2f  Mid Avg: $%.2f  Senior Avg: $%.2f%n",
+                        teamName, teamAvg, teamJuniorAvg, teamMidAvg, teamSeniorAvg);
             }
         }
 
@@ -263,13 +303,23 @@ class SalaryBandReportVisitor implements ReportVisitor {
         double avgSalary = 0;
         if(totalEmployees > 0)
             avgSalary = totalSalary / totalEmployees;
+        double overallJuniorAvg = 0;
+        if(juniorCount > 0)
+            overallJuniorAvg = juniorTotalSalary / juniorCount;
+        double overallMidAvg = 0;
+        if(midCount > 0)
+            overallMidAvg = midTotalSalary / midCount;
+        double overallSeniorAvg = 0;
+        if(seniorCount > 0)
+            overallSeniorAvg = seniorTotalSalary / seniorCount;
         System.out.printf("Total Employees : %d%n", totalEmployees);
         System.out.printf("Overall Avg     : $%.2f%n", avgSalary);
+        System.out.printf("Junior Avg      : $%.2f%n", overallJuniorAvg);
+        System.out.printf("Mid Avg         : $%.2f%n", overallMidAvg);
+        System.out.printf("Senior Avg      : $%.2f%n", overallSeniorAvg);
         System.out.println("------------------------------------------------------------------------");
     }
 }
-
-// ────────────────────────────────────────────────────────
 
 // It is concrete visitor class
 class HeadcountReportVisitor implements ReportVisitor {
