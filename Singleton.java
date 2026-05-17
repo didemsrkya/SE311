@@ -1,21 +1,28 @@
-package singleton;
+// TEAM MEMBERS:
+// [DİDEM SARIKAYA]
+// [DUYGU SÖĞÜTDALLI]
+// [YAĞMUR DAĞDEMİR]
+// [EFE YOLARTIRAN]
 
-import command.CommandHistory;
-import command.HRCommand;
-import model.Department;
-import observer.CorporateHead;
-import visitor.ReportVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
- /**
-  *  * OrgChartManager - Singleton Pattern.
-  *  * Single entry point for the entire organization tree.
-  *  * Only one instance can exist, preventing inconsistent state.
-  *  * Handles command execution, report generation, and CorporateHead management.
-  *  */
+// ════════════════════════════════════════════════════════
+//  SINGLETON PATTERN  —  Single Instance / Global Access Point
+// ════════════════════════════════════════════════════════
+// Participant mapping:
+// Singleton: OrgChartManager
+// Unique instance holder: private static OrgChartManager instance
+// Private constructor: prevents direct object creation from outside
+// Global access point: OrgChartManager.getInstance()
+// Managed shared state: departments, command history, and corporate head observer
+// Client: Main obtains the single manager instance through getInstance()
 
-public class OrgChartManager {
+/**
+ * OrgChartManager is the single entry point for the organization tree.
+ * It coordinates departments, commands, reports, and observer registration.
+ */
+class OrgChartManager {
 
     private static OrgChartManager instance;
 
@@ -23,20 +30,18 @@ public class OrgChartManager {
     private CommandHistory commandHistory;
     private CorporateHead corporateHead;
 
-     // Private constructor - cannot be instantiated from outside -
+    // Private constructor prevents direct instantiation from outside this class.
     private OrgChartManager() {
-        this.departments    = new ArrayList<>();
+        this.departments = new ArrayList<>();
         this.commandHistory = new CommandHistory();
     }
 
-     public static synchronized OrgChartManager getInstance() {
-         if (instance == null) {
-             instance = new OrgChartManager();
-         }
-         return instance;
-     }
-
-    //Department Management
+    public static synchronized OrgChartManager getInstance() {
+        if (instance == null) {
+            instance = new OrgChartManager();
+        }
+        return instance;
+    }
 
     public void addDepartment(Department dept) {
         if (corporateHead != null) {
@@ -53,17 +58,12 @@ public class OrgChartManager {
         return departments;
     }
 
-     //CorporateHead Assignment
-
     public void setCorporateHead(CorporateHead head) {
         this.corporateHead = head;
-        // Add as observer to all existing departments
         for (Department dept : departments) {
             dept.addObserver(head);
         }
     }
-
-     //Command Execution (including audit log)
 
     public void executeCommand(HRCommand command) {
         command.execute();
@@ -80,20 +80,12 @@ public class OrgChartManager {
         }
     }
 
-     //Report Generation
-
-    /**
-     * Tüm organizasyon ağacı üzerinde Visitor çalıştırır.
-     * Her departman accept() ile Visitor'ı karşılar, tree traverse edilir.
-     */
     public void generateReport(ReportVisitor visitor) {
         for (Department dept : departments) {
             dept.accept(visitor);
         }
         visitor.printReport();
     }
-
-     //Org Chart Printing
 
     public void printOrgChart() {
         System.out.println("\n════════════ ORGANIZATIONAL CHART ════════════");
@@ -102,8 +94,6 @@ public class OrgChartManager {
         }
         System.out.println("═══════════════════════════════════════════════\n");
     }
-
-    //Audit Log
 
     public void printAuditLog() {
         commandHistory.printAuditLog();

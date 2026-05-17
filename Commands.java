@@ -13,6 +13,14 @@ import java.util.List;
 // ════════════════════════════════════════════════════════
 //  COMMAND PATTERN  —  Command / ConcreteCommands / History
 // ════════════════════════════════════════════════════════
+// Participant mapping:
+// Command: HRCommand
+// Concrete Commands: HireEmployeeCommand, PromoteEmployeeCommand,
+// MergeDepartmentCommand, SplitDepartmentCommand, LayOffEmployeeCommand
+// Receivers: Team, Employee, Department, and OrgChartManager
+// Invoker: OrgChartManager.executeCommand()
+// Client: Main creates command objects and sends them to OrgChartManager
+// History/Audit support: CommandHistory stores executed commands and log entries
 
 /**
  * COMMAND INTERFACE

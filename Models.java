@@ -12,6 +12,13 @@ import java.util.List;
 // ════════════════════════════════════════════════════════
 //  COMPOSITE PATTERN  —  Component / Leaf / Composite
 // ════════════════════════════════════════════════════════
+// Participant mapping:
+// Component: OrgComponent
+// Leaf: Employee
+// Composite nodes: Team and Department
+// Client: Main builds the hierarchy through OrgComponent references
+// Visitor Element role: OrgComponent.accept() lets visitors traverse each node
+// Observer Subject role: Department also publishes merge/split events
 
 /**
  * OrgComponent - Composite Pattern'in temel arayüzü.
