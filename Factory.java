@@ -5,9 +5,7 @@
 // [EFE YOLARTIRAN]
 import java.time.LocalDate;
 
-// ════════════════════════════════════════════════════════
 //  FACTORY PATTERN  —  AbstractFactory / ConcreteFactory
-// ════════════════════════════════════════════════════════
 // Participant mapping:
 // Abstract Factory: OrgComponentFactory
 // Concrete Factory: HRFactory

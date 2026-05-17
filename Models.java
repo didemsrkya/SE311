@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-// ════════════════════════════════════════════════════════
 //  COMPOSITE PATTERN  —  Component / Leaf / Composite
-// ════════════════════════════════════════════════════════
 // Participant mapping:
 // Component: OrgComponent
 // Leaf: Employee
@@ -20,11 +18,6 @@ import java.util.List;
 // Visitor Element role: OrgComponent.accept() lets visitors traverse each node
 // Observer Subject role: Department also publishes merge/split events
 
-/**
- * OrgComponent - Composite Pattern'in temel arayüzü.
- * Department, Team ve Employee sınıfları bu arayüzü uygular.
- * Tüm organizasyon elemanları bu tip üzerinden yönetilir.
- */
 interface OrgComponent {
     String getName();
     void accept(ReportVisitor visitor); //This is the participant of our visitor pattern. It is the Element.

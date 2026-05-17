@@ -7,9 +7,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// ════════════════════════════════════════════════════════
 //  SINGLETON PATTERN  —  Single Instance / Global Access Point
-// ════════════════════════════════════════════════════════
 // Participant mapping:
 // Singleton: OrgChartManager
 // Unique instance holder: private static OrgChartManager instance
@@ -18,10 +16,6 @@ import java.util.List;
 // Managed shared state: departments, command history, and corporate head observer
 // Client: Main obtains the single manager instance through getInstance()
 
-/**
- * OrgChartManager is the single entry point for the organization tree.
- * It coordinates departments, commands, reports, and observer registration.
- */
 class OrgChartManager {
 
     private static OrgChartManager instance;

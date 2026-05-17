@@ -8,9 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-// ════════════════════════════════════════════════════════
 //  VISITOR PATTERN  —  Visitor / ConcreteVisitors / Elements
-// ════════════════════════════════════════════════════════
 // Participant mapping:
 // Visitor: ReportVisitor
 // Concrete Visitors: DiversityReportVisitor, SeniorityReportVisitor,

@@ -8,9 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-// ════════════════════════════════════════════════════════
 //  COMMAND PATTERN  —  Command / ConcreteCommands / History
-// ════════════════════════════════════════════════════════
 // Participant mapping:
 // Command: HRCommand
 // Concrete Commands: HireEmployeeCommand, PromoteEmployeeCommand,

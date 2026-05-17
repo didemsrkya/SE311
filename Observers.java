@@ -4,10 +4,7 @@
 // [YAĞMUR DAĞDEMİR]
 // [EFE YOLARTIRAN]
 
-
-// ════════════════════════════════════════════════════════
 //  OBSERVER PATTERN  —  Subject / Observer / ConcreteObserver
-// ════════════════════════════════════════════════════════
 // Participant mapping:
 // Subject interface: OrgSubject
 // Concrete Subject: Department, implemented in Models.java
