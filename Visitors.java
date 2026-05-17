@@ -16,7 +16,7 @@ import java.util.Map;
 // Concrete Visitors: DiversityReportVisitor, SeniorityReportVisitor,
 // SalaryBandReportVisitor, HeadcountReportVisitor, HireDateReportVisitor
 // Elements: Employee, Team, Department
-// Element accept methods: implemented in Models.java
+// Element accept methods: OrgComponent
 // Object Structure: OrgChartManager stores departments and starts traversal
 // Client: Main selects which report visitor to run
 
