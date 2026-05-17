@@ -16,18 +16,18 @@ public class Main {
         System.out.println("=== SE311 - HR Application Demo ===");
         System.out.println();
 
-        // ─── 1. SINGLETON ────────────────────────────────────────────
+        //SINGLETON
         System.out.println("(SINGLETON) OrgChartManager");
         OrgChartManager manager = OrgChartManager.getInstance();
         System.out.println("OrgChartManager instance created: " + (manager != null));
         System.out.println("Same instance? " + (manager == OrgChartManager.getInstance()) + "\n");
 
-        // ─── 2. OBSERVER ─────────────────────────────────────────────
+        //OBSERVER
         System.out.println("(OBSERVER) CorporateHead setup ");
         CorporateHead ceo = new CorporateHead("Alice Johnson (CEO)");
         manager.setCorporateHead(ceo);
 
-        // ─── 3. FACTORY ──────────────────────────────────────────────
+        //FACTORY
         System.out.println("(FACTORY) Creating org components ");
         OrgComponentFactory factory = new HRFactory();
 
@@ -51,7 +51,7 @@ public class Main {
         Employee emp6 = factory.createEmployee("Tony Stark",   "Male", LocalDate.of(2003, 2, 28), 91000, "Senior Analyst");
         Employee mgr1 = factory.createManager("Ufuk Celikkan",  "Male",   LocalDate.of(1998, 6, 12), 130000);
 
-        // ─── 4. COMPOSITE ────────────────────────────────────────────
+        // COMPOSITE
         System.out.println("\n(COMPOSITE) Building hierarchy ");
 
         backendTeam.addMember(emp1);
@@ -75,7 +75,7 @@ public class Main {
 
         manager.printOrgChart();
 
-        // ─── 5. COMMAND ──────────────────────────────────────────────
+        //COMMAND
         System.out.println("(COMMAND) HR Operations\n");
 
         // Hire
@@ -99,12 +99,12 @@ public class Main {
 
         manager.printOrgChart();
 
-        // ─── Undo Demo ───────────────────────────────────────────────
+        //Undo Demo
         System.out.println("(COMMAND) Undo last operation");
         manager.undoLastCommand();
         manager.printOrgChart();
 
-        // ─── 6. VISITOR - Reports ────────────────────────────────────
+        //VISITOR - Reports
         System.out.println("\n (VISITOR) Generating Reports \n");
 
         System.out.println("--- Report 1: Diversity ---");
@@ -122,7 +122,7 @@ public class Main {
         System.out.println("\n--- Report 5: Hire Date by Year ---");
         manager.generateReport(new HireDateReportVisitor());
 
-        // ─── Audit Log ───────────────────────────────────────────────
+        //Audit Log
         System.out.println("\n(COMMAND) Audit Log");
         manager.printAuditLog();
 
