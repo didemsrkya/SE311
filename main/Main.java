@@ -130,6 +130,7 @@ public class Main {
         System.out.println("\n**** [COMMAND] Audit Log ****");
         manager.printAuditLog();
 
-        System.out.println("\n!!!!!! Demo complete !!!!!!");
-    }
+        System.out.println("\n!!!!!! Demo complete !!!!!!"); 
+
+    
 }
