@@ -17,18 +17,18 @@ public class Main {
         System.out.println();
 
         // ─── 1. SINGLETON ────────────────────────────────────────────
-        System.out.println("**** [SINGLETON] OrgChartManager ****");
+        System.out.println("(SINGLETON) OrgChartManager");
         OrgChartManager manager = OrgChartManager.getInstance();
         System.out.println("OrgChartManager instance created: " + (manager != null));
         System.out.println("Same instance? " + (manager == OrgChartManager.getInstance()) + "\n");
 
         // ─── 2. OBSERVER ─────────────────────────────────────────────
-        System.out.println("**** [OBSERVER] CorporateHead setup ****");
+        System.out.println("(OBSERVER) CorporateHead setup ");
         CorporateHead ceo = new CorporateHead("Alice Johnson (CEO)");
         manager.setCorporateHead(ceo);
 
         // ─── 3. FACTORY ──────────────────────────────────────────────
-        System.out.println("**** [FACTORY] Creating org components ****");
+        System.out.println("(FACTORY) Creating org components ");
         OrgComponentFactory factory = new HRFactory();
 
         // Departments
@@ -52,7 +52,7 @@ public class Main {
         Employee mgr1 = factory.createManager("Ufuk Celikkan",  "Male",   LocalDate.of(1998, 6, 12), 130000);
 
         // ─── 4. COMPOSITE ────────────────────────────────────────────
-        System.out.println("\n**** [COMPOSITE] Building hierarchy ****");
+        System.out.println("\n(COMPOSITE) Building hierarchy ");
 
         backendTeam.addMember(emp1);
         backendTeam.addMember(emp3);
@@ -76,7 +76,7 @@ public class Main {
         manager.printOrgChart();
 
         // ─── 5. COMMAND ──────────────────────────────────────────────
-        System.out.println("**** [COMMAND] HR Operations ****\n");
+        System.out.println("(COMMAND) HR Operations\n");
 
         // Hire
         Employee newHire = factory.createEmployee("Adriana Lima", "Female", LocalDate.of(2024, 1, 15), 60000, "Junior Developer");
@@ -100,12 +100,12 @@ public class Main {
         manager.printOrgChart();
 
         // ─── Undo Demo ───────────────────────────────────────────────
-        System.out.println("**** [COMMAND] Undo last operation ****");
+        System.out.println("(COMMAND) Undo last operation");
         manager.undoLastCommand();
         manager.printOrgChart();
 
         // ─── 6. VISITOR - Reports ────────────────────────────────────
-        System.out.println("\n**** [VISITOR] Generating Reports ****\n");
+        System.out.println("\n (VISITOR) Generating Reports \n");
 
         System.out.println("--- Report 1: Diversity ---");
         manager.generateReport(new DiversityReportVisitor());
@@ -123,9 +123,9 @@ public class Main {
         manager.generateReport(new HireDateReportVisitor());
 
         // ─── Audit Log ───────────────────────────────────────────────
-        System.out.println("\n**** [COMMAND] Audit Log ****");
+        System.out.println("\n(COMMAND) Audit Log");
         manager.printAuditLog();
 
-        System.out.println("\n!!!!!! Demo complete !!!!!!");
+        System.out.println("\nDemo complete");
     }
 }
