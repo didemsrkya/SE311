@@ -379,13 +379,13 @@ class HireDateReportVisitor implements ReportVisitor {
 
     private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
 
-    // year -> list of employee names hired that year
+    // year and list of employee names hired that year
     private Map<Integer, List<String>> yearMap = new LinkedHashMap<>();
 
-    // dept -> year -> list of employee names
+    // year for each department and list of employee names
     private Map<String, Map<Integer, List<String>>> deptYearMap = new LinkedHashMap<>();
 
-    // dept|team -> year -> list of employee names
+    // year for each team in the department and list of employee names
     private Map<String, Map<Integer, List<String>>> teamYearMap = new LinkedHashMap<>();
 
     @Override
