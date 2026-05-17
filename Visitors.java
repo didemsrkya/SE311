@@ -371,7 +371,6 @@ class HeadcountReportVisitor implements ReportVisitor {
             total += count;
             List<String> teams = teamDetails.get(deptName);
 
-            // This is the part where we formatting the output, We used AI in the next 2 lines to format output.
             String teamPart = teams.isEmpty() ? "" : " (" + String.join(" , ", teams) + ")";
             System.out.printf("%-15s : %3d employees%-60s %n", deptName, count, teamPart);
         }
