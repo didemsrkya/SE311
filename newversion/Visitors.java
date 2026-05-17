@@ -10,10 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-// ════════════════════════════════════════════════════════
-//  VISITOR PATTERN  —  Visitor Interface / ConcreteVisitors
-// ════════════════════════════════════════════════════════
-
 //This is our visitor interface
 interface ReportVisitor {
     void visitEmployee(Employee employee);
@@ -21,8 +17,6 @@ interface ReportVisitor {
     void visitDepartment(Department department);
     void printReport();
 }
-
-// ────────────────────────────────────────────────────────
 
 // It is concrete visitor class
 class DiversityReportVisitor implements ReportVisitor {
@@ -32,40 +26,37 @@ class DiversityReportVisitor implements ReportVisitor {
     private String currentDept = ""; //we need this to know which department we are in
     private String currentTeam = ""; //we need this to know which team we are in
 
-    private Map<String, int[]> deptData = new LinkedHashMap<>(); //department name -> [male count, female count]
-    private Map<String, int[]> teamData = new LinkedHashMap<>(); //dept|team name -> [male count, female count]
+    private Map<String, int[]> deptData = new LinkedHashMap<>(); //we keep department name and [male count, female count]
+    private Map<String, int[]> teamData = new LinkedHashMap<>(); // we keep team name in the department and [male count, female count]
     private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep teams of each department here
 
     @Override
     public void visitDepartment(Department department) {
-        //when we visit a department we save its name and create empty arrays for counting
-        currentDept = department.getName();
-        currentTeam = "";
-        deptData.put(currentDept, new int[]{0, 0});
-        deptTeams.put(currentDept, new ArrayList<>());
+        currentDept = department.getName(); //we are updating the department we are in
+        currentTeam = ""; //we are resetting the team information
+        deptData.put(currentDept, new int[]{0, 0}); //new department and an empty array for male and female numbers
+        deptTeams.put(currentDept, new ArrayList<>()); //we are adding a new list here to add team names in visitTeam
     }
 
     @Override
     public void visitTeam(Team team) {
-        //when we visit a team we save its name and add it to the department's team list
-        currentTeam = team.getName();
-        teamData.put(currentDept + "|" + currentTeam, new int[]{0, 0});
-        deptTeams.get(currentDept).add(currentTeam);
+        currentTeam = team.getName(); //we are updating the team we are in.
+        teamData.put(currentDept + "|" + currentTeam, new int[]{0, 0}); //we are adding the team name and a new array for the team male and female count.
+        deptTeams.get(currentDept).add(currentTeam); //adding the information of this team is in this department.
     }
 
     @Override
     public void visitEmployee(Employee employee) {
-        //In here we visit each employee and count the number of male and female employees
-        if (employee.getGender().equalsIgnoreCase("Male")) {
-            maleCount++;
-            deptData.get(currentDept)[0]++;
-            if (teamData.containsKey(currentDept + "|" + currentTeam))
-                teamData.get(currentDept + "|" + currentTeam)[0]++;
+        if (employee.getGender().equalsIgnoreCase("Male")) { //if employee is male
+            maleCount++; //increase the total male count in the company
+            deptData.get(currentDept)[0]++; //increase the male count in the department
+            if (teamData.containsKey(currentDept + "|" + currentTeam)) 
+                teamData.get(currentDept + "|" + currentTeam)[0]++; //increase the male count the team
         } else {
-            femaleCount++;
-            deptData.get(currentDept)[1]++;
+            femaleCount++; //increase the total female count in the company
+            deptData.get(currentDept)[1]++; //increase the female count in the department
             if (teamData.containsKey(currentDept + "|" + currentTeam))
-                teamData.get(currentDept + "|" + currentTeam)[1]++;
+                teamData.get(currentDept + "|" + currentTeam)[1]++;  //increase the female count the team
         }
     }
 
@@ -199,8 +190,8 @@ class SalaryBandReportVisitor implements ReportVisitor {
     private String currentDept = "";
     private String currentTeam = "";
 
-    private Map<String, double[]> deptSalaryMap = new LinkedHashMap<>(); //dept -> [totalSalary, employeeCount]
-    private Map<String, double[]> teamSalaryMap = new LinkedHashMap<>(); //dept|team -> [totalSalary, employeeCount]
+    private Map<String, double[]> deptSalaryMap = new LinkedHashMap<>(); //dept , [totalSalary, employeeCount]
+    private Map<String, double[]> teamSalaryMap = new LinkedHashMap<>(); //dept|team, [totalSalary, employeeCount]
     private Map<String, List<String>> deptTeams = new LinkedHashMap<>(); //we keep which teams are in which department
 
     @Override
