@@ -284,7 +284,7 @@ class SalaryBandReportVisitor implements ReportVisitor {
     }
 
     private String average(double total, int count) {
-        return count == 0 ? "N/A" : String.format("$%.2f", total / count);
+        return count == 0 ? "0" : String.format("$%.2f", total / count);
     }
 
     private static class SalaryStats {
